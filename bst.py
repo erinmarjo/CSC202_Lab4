@@ -24,15 +24,17 @@ class BinarySearchTree:
 
 ################ Functions ######################
 
+#### COMES BEFORE ####
 
 ## determine if one value comes before another
-def comes_before(prim: int, sec: int) -> bool:
+def comes_before(prim: Any, sec: Any) -> bool:
     if prim < sec:
         return True
     else:
         return False
 
-#### IS EMPTY ####    
+#### IS EMPTY ####
+
 ## determine if BST is empty or not
 def is_empty(bst: BinarySearchTree) -> bool:
     match bst:
@@ -82,3 +84,36 @@ def lookup_helper(t: BinTree, val: Any, lt: Callable[[Any, Any], bool]) -> bool:
 def lookup(bst: BinarySearchTree, val: Any) -> bool:
     return lookup_helper(bst.tree, val, bst.fun)
 
+
+#### DELETE ####
+
+## delete helper function
+
+def delete_helper(t: BinTree, val : Any, lt: Callable[[Any, Any], bool]) -> BinTree:
+    if t is None:
+        return None
+    elif (not lt(val, t.value)) and (not lt(t.value, val)):
+        if t.value is None and t.right is None:
+            return None
+        elif t.left is None:
+            return t.right
+        elif t.right is None:
+            return t.left
+        smallest_node = t.right
+        while smallest_node.left is not None:
+            smallest_node = smallest_node.left
+        current_right = delete_helper(t.right, smallest_node.value, lt)
+        return Node(smallest_node.value, t.left, current_right)
+    elif lt(val, t.value):
+        return Node(t.value, delete_helper(t.left, val, lt), t.right)
+    else:
+        return Node(t.value, t.left, delete_helper(t.right, val, lt))
+
+## remove value from BinarySearchTree; keep BST properties
+
+def delete(bst: BinarySearchTree, val: Any) -> BinarySearchTree:
+    return BinarySearchTree(bst.fun, delete_helper(bst.tree, val, bst.fun))
+
+
+########### TESTS ##########
+## tests for `bst.py` are located in `bst_tests.py`
