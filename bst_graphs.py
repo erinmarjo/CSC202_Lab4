@@ -8,10 +8,52 @@ import numpy as np
 import random
 sys.setrecursionlimit(10**6)
 from bst import *
+import time
 
 
 TREES_PER_RUN : int = 10000
 
+## generate BinarySearchTree with n random floats in [0,]
+def random_tree(n : int) -> BinarySearchTree:
+    bst = BinarySearchTree(comes_before, None)
+    for _ in range(n):
+        val = random.random()
+        bst = insert(bst, val)
+    return bst
+
+## helper code to find height of BST
+def bst_height(bst: BinarySearchTree) -> Any:
+    if bst.tree is None:
+        return None
+    else:
+        L_height = bst_height(bst.tree.left)
+        R_height = bst_height(bst.tree.right)
+        return 1 + max(L_height, R_height)
+
+
+## find n_max that is 1.5-2.5 seconds
+'''
+start_ranndom_tree = time.perf_counter()
+
+result_random_tree = random_tree(1200)
+
+stop_random_tree = time.perf_counter()
+
+time_range = print("rt for random tree func= ", stop_random_tree - start_ranndom_tree)
+'''
+## loop this
+def pcounter_exp(n : int):
+    start_ranndom_tree = time.perf_counter()
+    for _ in range(TREES_PER_RUN):
+        random_tree(n)
+    stop_random_tree = time.perf_counter()
+    time_range = stop_random_tree - start_ranndom_tree
+    print("time elapsed = ", time_range)
+
+pcounter_exp(50)
+
+## below is graphing example
+'''
 def example_graph_creation() -> None:
     pass # Return log-base-2 of 'x' + 5.
     def f_to_graph (x : float) -> float:
@@ -42,3 +84,4 @@ def example_graph_creation() -> None:
  
 if (__name__ == '__main__'):
     example_graph_creation()
+'''
