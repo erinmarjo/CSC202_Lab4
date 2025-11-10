@@ -22,25 +22,23 @@ def random_tree(n : int) -> BinarySearchTree:
     return bst
 
 ## helper code to find height of BST
-def bst_height(bst: BinarySearchTree) -> Any:
-    if bst.tree is None:
-        return None
-    else:
-        L_height = bst_height(bst.tree.left)
-        R_height = bst_height(bst.tree.right)
-        return 1 + max(L_height, R_height)
+def bst_height(bst:BinarySearchTree) -> int:
+    def node_height(node: BinTree) -> int:
+        if node is None:
+            return 0
+        return 1 + max(node_height(node.left), node_height(node.right))
+    return node_height(bst.tree)
 
+## helper code to find average tree height for n
+def avg_height(n):
+    total = 0
+    for _ in range(TREES_PER_RUN):
+        bst = random_tree(n)
+        total += bst_height(bst)
+    return total/TREES_PER_RUN
 
 ## find n_max that is 1.5-2.5 seconds
-'''
-start_ranndom_tree = time.perf_counter()
 
-result_random_tree = random_tree(1200)
-
-stop_random_tree = time.perf_counter()
-
-time_range = print("rt for random tree func= ", stop_random_tree - start_ranndom_tree)
-'''
 ## loop this
 def pcounter_exp(n : int):
     start_ranndom_tree = time.perf_counter()
@@ -50,9 +48,26 @@ def pcounter_exp(n : int):
     time_range = stop_random_tree - start_ranndom_tree
     print("time elapsed = ", time_range)
 
-pcounter_exp(50)
+pcounter_exp(60) ## n = 50 runs in about 1.7-1.8 second each time
 
-## below is graphing example
+########### AVERAGE HEIGHT OF TREE GRAPH ################
+
+def avg_tree_height_graph(n_max: int) -> None:
+    x_coords : List[int] = [int(x) for x in np.linspace(0, n_max, 50)]
+    y_coords : List[float] = [avg_height(n) for n in x_coords]
+    x_numpy : np.ndarray = np.array(x_coords)
+    y_numpy : np.ndarray = np.array(y_coords)
+
+    plt.plot(x_numpy, y_numpy, label = "Average Tree Height")
+    plt.xlabel("X")
+    plt.ylabel("Y")
+    plt.title("Graph of Average BST Tree Heights")
+    plt.grid(True)
+    plt.legend()
+    plt.show()
+
+if (__name__ == '__main__'):
+    avg_tree_height_graph(50)
 '''
 def example_graph_creation() -> None:
     pass # Return log-base-2 of 'x' + 5.

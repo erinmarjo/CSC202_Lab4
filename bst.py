@@ -88,18 +88,17 @@ def lookup(bst: BinarySearchTree, val: Any) -> bool:
 #### DELETE ####
 
 ## delete helper function
-
 def delete_helper(t: BinTree, val : Any, lt: Callable[[Any, Any], bool]) -> BinTree:
     if t is None:
         return None
     elif (not lt(val, t.value)) and (not lt(t.value, val)):
-        if t.value is None and t.right is None:
+        if t.left is None and t.right is None: # no children
             return None
-        elif t.left is None:
+        elif t.left is None:                   # R child
             return t.right
-        elif t.right is None:
+        elif t.right is None:                  # L child
             return t.left
-        smallest_node = t.right
+        smallest_node = t.right                # two children
         while smallest_node.left is not None:
             smallest_node = smallest_node.left
         current_right = delete_helper(t.right, smallest_node.value, lt)
@@ -111,7 +110,9 @@ def delete_helper(t: BinTree, val : Any, lt: Callable[[Any, Any], bool]) -> BinT
 
 ## remove value from BinarySearchTree; keep BST properties
 
-def delete(bst: BinarySearchTree, val: Any) -> BinarySearchTree:
+def delete(bst: Optional[BinarySearchTree], val: Any) -> Optional[BinarySearchTree]:
+    if bst is None:
+        return None
     return BinarySearchTree(bst.fun, delete_helper(bst.tree, val, bst.fun))
 
 

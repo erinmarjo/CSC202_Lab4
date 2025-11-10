@@ -5,6 +5,7 @@ from dataclasses import dataclass
 sys.setrecursionlimit(10**6)
 from bst import *
 from math import sqrt
+from bst_graphs import bst_height
 
 @dataclass(frozen = True)
 class Point2:
@@ -89,6 +90,7 @@ class BSTTests(unittest.TestCase):
                                                         Node(16, None, None))))
         v = 22
         self.assertFalse(lookup(bst,v))
+    '''     
     def test_delete(self):
         bst = BinarySearchTree(comes_before, Node(10,
                                                     Node(3,
@@ -108,10 +110,118 @@ class BSTTests(unittest.TestCase):
                                                               Node(12, None, None),
                                                               Node(16, None, None))))
         self.assertEqual(delete(bst, v), bst_result)
-    def test_delete2(self):
+    '''
+    def test_delete_none(self):
         bst : BinTree = None
         v = 3
         self.assertEqual(delete(bst,v), None)
+    def test_delete_r_no_childre(self):
+        bst = BinarySearchTree(comes_before, Node(10,
+                                                  Node(3, None, None),
+                                                  Node(15, None, None)))
+        bst_result = BinarySearchTree(comes_before, Node(10,
+                                                         Node(3, None, None),
+                                                         None))
+        v = 15
+        self.assertEqual(delete(bst, v), bst_result)
+    def test_delete_l_no_childre(self):
+        bst = BinarySearchTree(comes_before, Node(10,
+                                                  Node(3, None, None),
+                                                  Node(15, None, None)))
+        bst_result = BinarySearchTree(comes_before, Node(10,
+                                                         None,
+                                                         Node(15, None, None)))
+        v = 3
+        self.assertEqual(delete(bst, v), bst_result)
+    def test_delete_two_children(self):
+        bst = BinarySearchTree(comes_before, Node(10,
+                                                  Node(3, None, None),
+                                                  Node(15, None, None)))
+        bst_result = BinarySearchTree(comes_before, Node(15,
+                                                         Node(3, None, None),
+                                                         None))
+        v = 10
+        self.assertEqual(delete(bst, v), bst_result)
+    def test_delete_two_children2(self):
+        bst = BinarySearchTree(comes_before, Node(10,
+                                                  Node(3, None, None),
+                                                  Node(15, 
+                                                       Node(14, None, None), 
+                                                       Node(16, None, None))))
+        bst_result = BinarySearchTree(comes_before, Node(14,
+                                                         Node(3, None, None),
+                                                         Node(15,
+                                                              None,
+                                                              Node(16, None, None))))
+        v = 10
+        self.assertEqual(delete(bst, v), bst_result)
+    def test_delete_two_children3(self):
+        bst = BinarySearchTree(comes_before, Node(10,
+                                                  Node(3, None, None),
+                                                  Node(15, 
+                                                       Node(14, None, None), 
+                                                       Node(16, None, None))))
+        bst_result = BinarySearchTree(comes_before, Node(10,
+                                                         Node(3, None, None),
+                                                         Node(16,
+                                                              Node(14, None, None),
+                                                              None)))
+        v = 15
+        self.assertEqual(delete(bst, v), bst_result)
+    def test_delete_one_child(self):
+        bst = BinarySearchTree(comes_before, Node(10,
+                                                    Node(3, None, None),
+                                                    Node(16,
+                                                        Node(14, None, None),
+                                                        None)))
+        bst_result = BinarySearchTree(comes_before, Node(10,
+                                                         Node(3, None, None),
+                                                         Node(14, None, None)))
+        v = 16
+        self.assertEqual(delete(bst, v), bst_result)
+    def test_delete_one_child2(self):
+        bst = BinarySearchTree(comes_before, Node(10,
+                                                  Node(3, None, None),
+                                                  Node(16,
+                                                       None,
+                                                       Node(14, None, None))))
+        bst_result = BinarySearchTree(comes_before, Node(10,
+                                                         Node(3, None, None),
+                                                         Node(14, None, None)))
+        v = 16
+        self.assertEqual(delete(bst, v), bst_result)
+        '''
+    def test_delete_one_child3(self):
+        bst = BinarySearchTree(comes_before, Node(10,
+                                                  Node(3,
+                                                       Node(1, None, None),
+                                                       Node(2,
+                                                            None,
+                                                            Node(4, None, None))),
+                                                  Node(15,
+                                                       Node(12, None, None),
+                                                       Node(16, None, None))))
+        bst_result = BinarySearchTree(comes_before, Node(10,
+                                                         Node(3,
+                                                              Node(1, None, None),
+                                                              Node(4, None, None)),
+                                                         Node(15,
+                                                              Node(12, None, None),
+                                                              Node(16, None, None))))
+        v = 2
+        self.assertEqual(delete(bst, v), bst_result)
+        '''
+    def test_bst_height(self):
+        bst = BinarySearchTree(comes_before, Node(10,
+                                                    Node(3,
+                                                        Node(1, None, None),
+                                                        Node(2, 
+                                                            None,
+                                                            Node(4, None, None))),
+                                                    Node(15,
+                                                        Node(12, None, None),
+                                                        Node(16, None, None))))
+        self.assertEqual(bst_height(bst), 4)
 
 
     
