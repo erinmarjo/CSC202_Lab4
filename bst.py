@@ -92,17 +92,23 @@ def delete_helper(t: BinTree, val : Any, lt: Callable[[Any, Any], bool]) -> BinT
     if t is None:
         return None
     elif (not lt(val, t.value)) and (not lt(t.value, val)):
+        
         if t.left is None and t.right is None: # no children
             return None
         elif t.left is None:                   # R child
             return t.right
         elif t.right is None:                  # L child
             return t.left
+        
         smallest_node = t.right                # two children
+        
         while smallest_node.left is not None:
             smallest_node = smallest_node.left
+        
         current_right = delete_helper(t.right, smallest_node.value, lt)
+        
         return Node(smallest_node.value, t.left, current_right)
+    
     elif lt(val, t.value):
         return Node(t.value, delete_helper(t.left, val, lt), t.right)
     else:

@@ -190,27 +190,32 @@ class BSTTests(unittest.TestCase):
                                                          Node(14, None, None)))
         v = 16
         self.assertEqual(delete(bst, v), bst_result)
-        '''
+        
     def test_delete_one_child3(self):
         bst = BinarySearchTree(comes_before, Node(10,
                                                   Node(3,
                                                        Node(1, None, None),
-                                                       Node(2,
+                                                       Node(4,
                                                             None,
-                                                            Node(4, None, None))),
+                                                            Node(5, None, None))),
                                                   Node(15,
                                                        Node(12, None, None),
                                                        Node(16, None, None))))
         bst_result = BinarySearchTree(comes_before, Node(10,
                                                          Node(3,
                                                               Node(1, None, None),
-                                                              Node(4, None, None)),
+                                                              Node(5, None, None)),
                                                          Node(15,
                                                               Node(12, None, None),
                                                               Node(16, None, None))))
-        v = 2
+        v = 4
+        #dtree = delete(bst, v)
+
+       #print(bst_result, '\n\n')
+
+        #print(dtree)
         self.assertEqual(delete(bst, v), bst_result)
-        '''
+
     def test_bst_height(self):
         bst = BinarySearchTree(comes_before, Node(10,
                                                     Node(3,

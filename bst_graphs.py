@@ -37,9 +37,9 @@ def avg_height(n):
         total += bst_height(bst)
     return total/TREES_PER_RUN
 
-## find n_max that is 1.5-2.5 seconds
+## find n_max that is 1.5-2.5 seconds for `random_tree()` and for `insert()`
 
-## loop this
+## find nmax for random_tree
 def pcounter_exp(n : int):
     start_ranndom_tree = time.perf_counter()
     for _ in range(TREES_PER_RUN):
@@ -48,10 +48,43 @@ def pcounter_exp(n : int):
     time_range = stop_random_tree - start_ranndom_tree
     print("time elapsed = ", time_range)
 
-pcounter_exp(60) ## n = 50 runs in about 1.7-1.8 second each time
+## probably some way to to write a function to find this, but for now
+## trial and error here. Start with 25
+#pcounter_exp(60) ## n = 50 runs in about 1.7-1.8 second each time
+
+
+## find average time to insert something into bst in seconds
+def avg_time_insert(n: int) -> float:
+    total_time = 0.0
+    for _ in range(TREES_PER_RUN):
+        bst = random_tree(n)
+        val = random.random()
+        start = time.perf_counter()
+        insert(bst, val)
+        end = time.perf_counter()
+        total_time +=(end-start)
+    return total_time/TREES_PER_RUN
+
+## find nmax for insert
+def n_max_insert() -> int:
+    n = 10
+    while True:
+        start = time.perf_counter()
+        for _ in range(TREES_PER_RUN):
+            bst = random_tree(n)
+            val = random.random()
+            insert(bst, val)
+        elapsed = time.perf_counter() - start
+        print(f"n={n}, time = {elapsed:.2f}s")
+        if 1.5 <= elapsed <= 2.5:
+            print(f"max = {n}")
+            return n
+        n +=10
+
+#n_max_insert() # n = 50 is between 1.5 and 2.5
 
 ########### AVERAGE HEIGHT OF TREE GRAPH ################
-
+''' take out comment to make graphs
 def avg_tree_height_graph(n_max: int) -> None:
     x_coords : List[int] = [int(x) for x in np.linspace(0, n_max, 50)]
     y_coords : List[float] = [avg_height(n) for n in x_coords]
@@ -59,44 +92,30 @@ def avg_tree_height_graph(n_max: int) -> None:
     y_numpy : np.ndarray = np.array(y_coords)
 
     plt.plot(x_numpy, y_numpy, label = "Average Tree Height")
-    plt.xlabel("X")
-    plt.ylabel("Y")
+    plt.xlabel("Number of Nodes")
+    plt.ylabel("Average Tree Height")
     plt.title("Graph of Average BST Tree Heights")
+    plt.grid(True)
+    plt.legend()
+    plt.show()
+
+def avg_time_insert_graph(n_max: int) -> None:
+    x_coords : List[int] = [int(x) for x in np.linspace(0, n_max, 50)]
+    y_coords : List[float] = [avg_time_insert(n) for n in x_coords]
+
+    x_numpy : np.ndarray = np.array(x_coords)
+    y_numpy : np.ndarray = np.array(y_coords)
+
+    plt.plot(x_numpy, y_numpy, label = "Average Time to Insert")
+    plt.xlabel("Number of Nodes")
+    plt.ylabel("Time to Insert Random Value (s)")
+    plt.title("Average Insert Time")
     plt.grid(True)
     plt.legend()
     plt.show()
 
 if (__name__ == '__main__'):
     avg_tree_height_graph(50)
-'''
-def example_graph_creation() -> None:
-    pass # Return log-base-2 of 'x' + 5.
-    def f_to_graph (x : float) -> float:
-        return math.log2( x ) + 5.0
-    # here we're using "list comprehensions": more of Python's  
-    # syntax sugar.
-    x_coords : List[float] = [ float(i) for i in range( 1, 100 ) ]
-    y_coords : List[float] = [ f_to_graph( x ) for x in x_coords ]
+    avg_time_insert_graph(50)
 
-
-    # Could have just used this type from the start, but I want
-    # to emphasize that 'matplotlib' uses 'numpy''s specific array
-    # type, which is different from the built-in Python array
-    # type.
-    x_numpy : np.ndarray = np.array( x_coords )
-    y_numpy : np.ndarray = np.array( y_coords )
-
-
-    plt.plot( x_numpy, y_numpy, label = 'log_2(x)' )
-    plt.xlabel("X")
-    plt.ylabel("Y")
-    plt.title("Example Graph")
-    plt.grid(True)
-    plt.legend() # makes the 'label's show up
-    plt.show()
-
-
- 
-if (__name__ == '__main__'):
-    example_graph_creation()
 '''
